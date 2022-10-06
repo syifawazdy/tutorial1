@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+
+<nav class="navbar bg-warning navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Nama: {{ nama }}</a>
+    <button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+    </a>
+  </div>
+</nav>
+
+<div class="container">
+  <table class="table table-info">
+    <thead class="table">
+      <th>Nama Barang</th>
+      <th>Harga Barang</th>
+      <th>Deskripsi</th>
+    </thead>
+    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+
+  <h5>Sesi terakhir login: {{ last_login }}</h5>
+
+  <hr />
+
+  <h4>Tambah Baru</h4>
+  <form method="POST" action="">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td>Nama Barang: </td>
+        <td><input type="text" id="nama_barang" name="nama_barang" placeholder="Nama Barang" class="form-control"></td>
+      </tr>
+
+      <tr>
+        <td>Harga Barang: </td>
+        <td><input type="number" id="harga_barang" name="harga_barang" placeholder="Harga Barang" class="form-control"></td>
+      </tr>
+
+      <tr>
+        <td>Deskripsi: </td>
+        <td><textarea class="form-control" id="deskripsi" name="deskripsi"></textarea></td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td><input class="btn btn-primary" type="submit" value="Submit" id="newBtn"></td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $.ajax({
+      type: 'POST',
+      url: '{% url "wishlist:create_wishlist" %}',
+      data: data, 
+      success: () => {
+        alert("Done!")
+        fetchData()
+      },
+       dataType: 'json'
+    });
+  
+  function fetchData() {
+    $.get("/wishlist/json", writeTable)
+  }
+
+  $(document).ready(() => {
+    $("#newBtn").click(postNew)
+    fetchData()
+  })
+</script>
+{% endblock content %}
